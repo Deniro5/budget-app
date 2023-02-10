@@ -2,11 +2,16 @@ import styled from "styled-components";
 import { useAppSelector } from "../../hooks";
 import useBalance from "../../Hooks/useBalance";
 import { formatNumberToDollar } from "../../utils";
+import {
+  getMonthlyTransactionExpenses,
+  getMonthlyTransactionIncome,
+} from "../../redux/slices/playerSlice";
 
 const BalanceDisplay = () => {
   const { isFetchingInitial, errorMessage } = useBalance();
   const balances = useAppSelector((state) => state.player.balances);
-  console.log(balances);
+  const monthlyTransactionExpense = useAppSelector(getMonthlyTransactionExpenses);
+  const monthlyTransactionIncome = useAppSelector(getMonthlyTransactionIncome);
 
   if (isFetchingInitial) {
     return <div> Loading </div>;
@@ -17,12 +22,22 @@ const BalanceDisplay = () => {
   return (
     <Container>
       <Label> Accounts: </Label>
-      {balances.map((balance) => (
-        <BalanceContainer>
-          <BalanceName> {balance.name} :</BalanceName>
-          <BalanceValue> {formatNumberToDollar(balance.balances.current)}</BalanceValue>
-        </BalanceContainer>
-      ))}
+      {balances &&
+        balances.map((balance) => (
+          <BalanceContainer>
+            <BalanceName> {balance.name} :</BalanceName>
+            <BalanceValue> {formatNumberToDollar(balance.balances.current)}</BalanceValue>
+          </BalanceContainer>
+        ))}
+      <hr />
+      <BalanceContainer>
+        <BalanceName> Monthly Expenses :</BalanceName>
+        <ExpenseValue> {formatNumberToDollar(monthlyTransactionExpense)}</ExpenseValue>
+      </BalanceContainer>
+      <BalanceContainer>
+        <BalanceName> Monthly Income :</BalanceName>
+        <IncomeValue> {formatNumberToDollar(monthlyTransactionIncome)}</IncomeValue>
+      </BalanceContainer>
     </Container>
   );
 };
@@ -52,6 +67,14 @@ const BalanceName = styled.div`
 const BalanceValue = styled.div`
   margin-left: 5px;
   margin-top: 1px;
+`;
+
+const IncomeValue = styled(BalanceValue)`
+  color: green;
+`;
+
+const ExpenseValue = styled(BalanceValue)`
+  color: red;
 `;
 
 export { BalanceDisplay };

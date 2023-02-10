@@ -53,7 +53,7 @@ const Grid = styled.div`
   grid-gap: 10px;
 
   & > div:nth-child(-n + 3) {
-    border: 1px solid black;
+    border: 1px solid whitesmoke;
     text-align: center;
   }
 
