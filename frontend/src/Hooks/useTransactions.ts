@@ -3,7 +3,7 @@ import { FETCH_LIMIT } from "../constants";
 import Context from "../Context";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import { setTransactions } from "../redux/slices/playerSlice";
-import { Transaction } from "../types";
+import { FetchedTransaction } from "../types";
 import moment from "moment";
 
 const useFetchTransactions = () => {
@@ -35,15 +35,18 @@ const useFetchTransactions = () => {
       return { paymentInitiation: false };
     }
     const data = await response.json();
-    const formattedTransactions = data.transactions.map((transaction: Transaction) => {
-      return {
-        name: transaction.name,
-        amount: transaction.amount,
-        date: transaction.date,
-        transaction_id: transaction.transaction_id,
-        category: transaction.category,
-      };
-    });
+    const formattedTransactions = data.transactions.map(
+      (transaction: FetchedTransaction) => {
+        return {
+          name: transaction.name,
+          amount: transaction.amount,
+          date: transaction.date,
+          transaction_id: transaction.transaction_id,
+          categories: transaction.category,
+          mainCategory: transaction.category[0],
+        };
+      }
+    );
     setErrorMessage(null);
     setIsFetchingInitial(false);
     dispatch(setTransactions(formattedTransactions));

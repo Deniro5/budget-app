@@ -49,22 +49,55 @@ export default playerSlice.reducer;
 
 const transactions = (state: RootState) => state.player.transactions;
 
+export const getMonthlyExpenses = createSelector([transactions], (transactions) =>
+  transactions.filter((transaction) => transaction.amount > 0)
+);
+
+export const getMonthlyIncomes = createSelector([transactions], (transactions) =>
+  transactions.filter((transaction) => transaction.amount < 0)
+);
+
 export const getMonthlyTransactionExpenses = createSelector(
-  [transactions],
-  (transactions) =>
-    transactions.reduce(
-      (total, transaction) =>
-        transaction.amount > 0 ? total + transaction.amount : total,
-      0
-    )
+  [getMonthlyExpenses],
+  (expenses) => expenses.reduce((total, expense) => total + expense.amount, 0)
 );
 
 export const getMonthlyTransactionIncome = createSelector(
-  [transactions],
-  (transactions) =>
-    transactions.reduce(
-      (total, transaction) =>
-        transaction.amount < 0 ? total - transaction.amount : total,
-      0
-    )
+  [getMonthlyIncomes],
+  (incomes) => incomes.reduce((total, income) => total + income.amount, 0)
+);
+
+export const getMonthlyNetIncome = createSelector(
+  [getMonthlyTransactionExpenses, getMonthlyTransactionIncome],
+  (expenses, revenue) => revenue - expenses
+);
+
+export const getExpenseCategoryValueMap = createSelector(
+  [getMonthlyExpenses],
+  (expenses) => {
+    const result: Record<string, number> = {};
+    expenses.forEach((expense) => {
+      if (result[expense.mainCategory]) {
+        result[expense.mainCategory] += expense.amount;
+      } else {
+        result[expense.mainCategory] = expense.amount;
+      }
+    });
+    return result;
+  }
+);
+
+export const getIncomeCategoryValueMap = createSelector(
+  [getMonthlyIncomes],
+  (incomes) => {
+    const result: Record<string, number> = {};
+    incomes.forEach((income) => {
+      if (result[income.mainCategory]) {
+        result[income.mainCategory] += income.amount;
+      } else {
+        result[income.mainCategory] = income.amount;
+      }
+    });
+    return result;
+  }
 );

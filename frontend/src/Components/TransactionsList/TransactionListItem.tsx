@@ -18,7 +18,7 @@ const TransactionListItem = ({ transaction }: ITransactionProps) => {
         </ImageContainer>
         <NameContainer>
           <TransactionName> {transaction.name} </TransactionName>
-          <TransactionCategory> {transaction.category[0]} </TransactionCategory>
+          <TransactionCategory> {transaction.mainCategory} </TransactionCategory>
         </NameContainer>
       </ImageAndNameContainer>
       <TransactionAmount> {formatNumberToDollar(transaction.amount)}</TransactionAmount>

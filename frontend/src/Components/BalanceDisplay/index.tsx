@@ -3,6 +3,9 @@ import { useAppSelector } from "../../hooks";
 import useBalance from "../../Hooks/useBalance";
 import { formatNumberToDollar } from "../../utils";
 import {
+  getExpenseCategoryValueMap,
+  getIncomeCategoryValueMap,
+  getMonthlyNetIncome,
   getMonthlyTransactionExpenses,
   getMonthlyTransactionIncome,
 } from "../../redux/slices/playerSlice";
@@ -12,6 +15,12 @@ const BalanceDisplay = () => {
   const balances = useAppSelector((state) => state.player.balances);
   const monthlyTransactionExpense = useAppSelector(getMonthlyTransactionExpenses);
   const monthlyTransactionIncome = useAppSelector(getMonthlyTransactionIncome);
+  const monthlyNetIncome = useAppSelector(getMonthlyNetIncome);
+  const test1 = useAppSelector(getExpenseCategoryValueMap);
+  const test2 = useAppSelector(getIncomeCategoryValueMap);
+
+  console.log(test1);
+  console.log(test2);
 
   if (isFetchingInitial) {
     return <div> Loading </div>;
@@ -37,6 +46,13 @@ const BalanceDisplay = () => {
       <BalanceContainer>
         <BalanceName> Monthly Income :</BalanceName>
         <IncomeValue> {formatNumberToDollar(monthlyTransactionIncome)}</IncomeValue>
+      </BalanceContainer>
+      <BalanceContainer>
+        <BalanceName> Net Income :</BalanceName>
+        <NetIncomeValue isPositive={monthlyNetIncome > 0}>
+          {" "}
+          {formatNumberToDollar(monthlyNetIncome)}
+        </NetIncomeValue>
       </BalanceContainer>
     </Container>
   );
@@ -75,6 +91,10 @@ const IncomeValue = styled(BalanceValue)`
 
 const ExpenseValue = styled(BalanceValue)`
   color: red;
+`;
+
+const NetIncomeValue = styled(BalanceValue)<{ isPositive: boolean }>`
+  color: ${({ isPositive }) => (isPositive ? "green" : "red")};
 `;
 
 export { BalanceDisplay };

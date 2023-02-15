@@ -10,7 +10,12 @@ export interface Transaction {
   amount: number;
   date: string;
   transaction_id: string;
-  category: string;
+  categories: string[];
+  mainCategory: string;
+}
+
+export interface FetchedTransaction extends Transaction {
+  category: string[];
 }
 
 interface BalanceValues {
