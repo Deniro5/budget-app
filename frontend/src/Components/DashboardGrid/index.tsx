@@ -3,7 +3,8 @@ import useFetchTransactions from "../../Hooks/useTransactions";
 import { Transaction } from "../../types";
 import { BalanceDisplay } from "../BalanceDisplay";
 import { TransactionsList } from "../TransactionsList";
-import BasePieChart from "../Charts/PieChart/BasePieChart";
+import ExpensePieChart from "../Charts/PieChart/ExpensePieChart";
+import IncomePieChart from "../Charts/PieChart/IncomePieChart";
 
 export type ITransactionProps = {
   transaction?: Transaction;
@@ -20,10 +21,11 @@ const DashboardGrid = ({ transaction }: ITransactionProps) => {
           <BalanceDisplay />
         </GridSection>
         <GridSection>
-          {" "}
-          <BasePieChart />{" "}
+          <ExpensePieChart />
         </GridSection>
-        <GridSection> 3 </GridSection>
+        <GridSection>
+          <IncomePieChart />
+        </GridSection>
         <GridSection>
           <OuterContainer>
             <ListLabel> Transactions </ListLabel>

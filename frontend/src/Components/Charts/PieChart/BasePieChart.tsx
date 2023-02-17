@@ -1,37 +1,16 @@
 import { Pie, PieChart, Legend } from "recharts";
 
-const data01 = [
-  {
-    name: "Group A",
-    value: 400,
-  },
-  {
-    name: "Group B",
-    value: 300,
-  },
-  {
-    name: "Group C",
-    value: 300,
-  },
-  {
-    name: "Group D",
-    value: 200,
-  },
-  {
-    name: "Group E",
-    value: 278,
-  },
-  {
-    name: "Group F",
-    value: 189,
-  },
-];
+interface BasePieChartProps {
+  data: { name: string; value: number; fill: string }[];
+  width?: number;
+  height?: number;
+}
 
-const BasePieChart = () => {
+const BasePieChart = ({ data, width = 200, height = 200 }: BasePieChartProps) => {
   return (
-    <PieChart width={200} height={200}>
+    <PieChart width={width} height={height}>
       <Pie
-        data={data01}
+        data={data}
         dataKey='value'
         nameKey='name'
         cx='50%'

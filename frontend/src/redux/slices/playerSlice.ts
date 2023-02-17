@@ -93,9 +93,10 @@ export const getIncomeCategoryValueMap = createSelector(
     const result: Record<string, number> = {};
     incomes.forEach((income) => {
       if (result[income.mainCategory]) {
-        result[income.mainCategory] += income.amount;
+        //Note that we have to reverse these because the incomes are negative
+        result[income.mainCategory] -= income.amount;
       } else {
-        result[income.mainCategory] = income.amount;
+        result[income.mainCategory] = -income.amount;
       }
     });
     return result;
